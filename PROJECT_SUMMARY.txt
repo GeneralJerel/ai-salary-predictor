@@ -1,0 +1,206 @@
+================================================================================
+AI JOB MARKET SALARY PREDICTION - ML CAPSTONE PROJECT
+Author: Jerel Velarde | 2026
+================================================================================
+
+PROJECT OVERVIEW
+================================================================================
+This end-to-end machine learning project predicts annual salaries for AI/data
+science professionals using supervised regression. The project demonstrates
+complete ML workflow from data preprocessing to model explainability.
+
+DATASET: 607 raw records (565 after duplicate removal) from Kaggle
+TARGET: salary_in_usd (continuous, $2,859-$600,000)
+BEST MODEL: Linear Regression (R² = 0.41, RMSE = $53,248)
+
+Note: All three models were hyperparameter-tuned using RandomizedSearchCV
+with 5-fold cross-validation. The modest R² reflects the inherent difficulty
+of predicting salary from limited categorical features — key predictors like
+education, years of experience, and total compensation are not in the dataset.
+
+================================================================================
+FILES CREATED
+================================================================================
+
+CORE SOURCE CODE (src/)
+  ✓ data_processing.py         Load, clean, validate data
+  ✓ feature_engineering.py     Engineer 9+ features, encode categories
+  ✓ train_models.py            Train LR, RF, XGBoost; evaluate models
+
+ANALYSIS & RESULTS
+  ✓ notebooks/Jerel_Velarde_Pillar5_Capstone_AI_Job_Market.ipynb
+    - 53 cells (13 markdown + 40 code)
+    - 6 major sections with complete analysis
+    - All 11 visualization outputs embedded
+    - Ready to run, fully executable
+
+  ✓ for_submission/Jerel_Velarde_Pillar5_Capstone_AI_Job_Market.ipynb
+    - Copy of notebook for submission
+
+CONFIGURATION & DOCUMENTATION
+  ✓ requirements.txt           All dependencies (12 packages)
+  ✓ README.md                  Comprehensive documentation
+  ✓ PROJECT_SUMMARY.txt        This file
+  ✓ .gitignore                 Git configuration
+
+DATA PIPELINE
+  ✓ data/raw/ds_salaries.csv   Original Kaggle dataset (unchanged)
+  ✓ data/processed/            Target location for cleaned data
+  ✓ models/trained_models/     Target location for serialized models
+  ✓ reports/                   Target location for visualizations (11 PNG)
+
+================================================================================
+PROJECT STRUCTURE & WORKFLOW
+================================================================================
+
+STEP 1: PROBLEM FRAMING
+  - Business problem: Salary prediction for market insights
+  - Data science problem: Supervised regression (salary_in_usd target)
+  - Metrics: RMSE, MAE, R² score
+
+STEP 2: DATASET OVERVIEW
+  - 607 raw records, 11 original columns
+  - 42 duplicates removed → 565 clean records
+  - Salary range: $2,859 - $600,000
+  - Features: experience, job_title, location, company_size, remote_ratio
+  - No missing values
+
+STEP 3: DATA PREPROCESSING & EDA
+  - Data cleaning: 42 duplicates removed, missing value check
+  - Feature engineering:
+    * Ordinal encode: experience_level (EN=1, MI=2, SE=3, EX=4)
+    * One-hot encode: employment_type, company_size
+    * Label encode: job_title (grouping rare <5 titles), continent
+    * Binary feature: is_us (1 if US-based)
+  - Visualizations (6):
+    * Salary distribution (linear + log)
+    * Salary vs experience boxplot
+    * Top 10 paying jobs
+    * Remote ratio distribution
+    * Correlation heatmap
+    * Dimensionality reduction (PCA + UMAP)
+
+STEP 4: MODEL IMPLEMENTATION
+  - Train/test split: 80/20 (452 train, 113 test)
+  - Feature scaling: StandardScaler for Linear Regression (fit on train only)
+  - Three models trained, tuned & evaluated:
+    * Linear Regression:         R²=0.4098, RMSE=$53,248, MAE=$33,731 ← BEST
+    * Random Forest (Tuned):     R²=0.4056, RMSE=$53,436, MAE=$32,189
+    * XGBoost (Tuned):           R²=0.3972, RMSE=$53,813, MAE=$32,574
+  - Hyperparameter tuning: RandomizedSearchCV (50 iter, 5-fold CV)
+  - Visualization: Actual vs predicted scatter plots (3 models)
+
+STEP 5: EXPLAINABILITY & BIAS
+  - SHAP analysis:
+    * TreeExplainer for best tree-based model
+    * Feature importance ranking
+    * Summary plots (bar + beeswarm)
+  - Bias analysis across:
+    * Experience levels (EN, MI, SE, EX)
+    * Continents (NA, EU, Asia, etc.)
+    * Prediction error distribution
+  - Fairness metrics: Statistical Parity, Equalized Odds, Calibration
+  - Visualizations: SHAP plots (3), error analysis (1)
+
+STEP 6: CONCLUSIONS & RECOMMENDATIONS
+  - Key findings summary
+  - Business recommendations (5 areas)
+  - Limitations (5 major)
+  - Future work (4 directions)
+
+================================================================================
+MODEL PERFORMANCE SUMMARY
+================================================================================
+
+MODEL COMPARISON TABLE
+┌──────────────────────────┬───────────┬──────────┬────────┬─────────┐
+│ Model                    │ RMSE      │ MAE      │ R²     │ CV R²   │
+├──────────────────────────┼───────────┼──────────┼────────┼─────────┤
+│ Linear Regression (BEST) │ $53,248   │ $33,731  │ 0.4098 │ 0.4203  │
+│ Random Forest (Tuned)    │ $53,436   │ $32,189  │ 0.4056 │ 0.4762  │
+│ XGBoost (Tuned)          │ $53,813   │ $32,574  │ 0.3972 │ 0.4801  │
+└──────────────────────────┴───────────┴──────────┴────────┴─────────┘
+
+TUNED HYPERPARAMETERS:
+
+Random Forest:
+  n_estimators: 100, max_depth: 20, min_samples_split: 10
+  min_samples_leaf: 1, max_features: sqrt
+
+XGBoost:
+  n_estimators: 300, max_depth: 10, learning_rate: 0.01
+  subsample: 0.6, colsample_bytree: 0.6, min_child_weight: 7
+  reg_alpha: 0.01, reg_lambda: 1.0
+
+INTERPRETATION:
+  - R² ≈ 0.41: Model explains ~41% of salary variance
+  - RMSE ≈ $53K: Average prediction error ±$53,000
+  - MAE ≈ $33K: Typical absolute error ~$33,000
+  - Remaining ~59% variance: external factors (education, equity, benefits,
+    company prestige, individual performance) not available in dataset
+
+================================================================================
+KEY INSIGHTS
+================================================================================
+
+SALARY STATISTICS:
+  Mean salary:      $110,610
+  Median salary:    $100,000
+  Salary range:     $2,859 - $600,000
+  US-based:         56.5% of records
+  Remote avg:       70.9%
+
+SALARY BY EXPERIENCE:
+  Entry:     ~$62K   (n=88)
+  Mid:       ~$88K   (n=208)
+  Senior:    ~$138K  (n=243)
+  Executive: ~$199K  (n=26)
+
+GEOGRAPHIC DISTRIBUTION:
+  North America: ~$140K (61.9%)
+  Europe:        ~$70K  (26.2%)
+  Asia:          ~$27K  (7.4%)
+
+================================================================================
+LIMITATIONS & FUTURE WORK
+================================================================================
+
+CURRENT LIMITATIONS:
+  1. Dataset bias toward US/recent data (~56% US-based)
+  2. Missing features: education, equity, bonuses, company prestige
+  3. ~59% unexplained variance (external factors not in dataset)
+  4. Small dataset: only 565 records limits model complexity
+  5. Rare job titles grouped together
+  6. Small sample sizes for some regions
+
+FUTURE ENHANCEMENTS:
+  1. Collect company industry/sector, education, certifications
+  2. Include equity compensation, bonuses, total comp
+  3. Time-series analysis for salary trends
+  4. Ensemble stacking or neural networks
+  5. Bias mitigation strategies
+  6. Web app for interactive predictions
+
+================================================================================
+CONCLUSION
+================================================================================
+
+Built a machine learning pipeline to predict AI/data science salaries with
+R² ≈ 0.41, explaining ~41% of salary variance using available features.
+While the model has moderate predictive power, it successfully demonstrates:
+
+✓ Complete end-to-end ML workflow (data → insights)
+✓ Multiple model comparison with hyperparameter tuning
+✓ Feature engineering best practices
+✓ SHAP-based explainability
+✓ Fairness and bias analysis
+✓ Business recommendations
+✓ Professional documentation
+
+The moderate R² is a realistic and honest result for this feature set.
+The model correctly identifies experience level, job title, and location
+as the strongest salary predictors and provides actionable market insights.
+
+================================================================================
+END OF PROJECT SUMMARY
+================================================================================
