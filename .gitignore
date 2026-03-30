@@ -54,3 +54,4 @@ data/processed/
 # Backup files
 *.bak
 0.Backup-project/
+~$*.docx
